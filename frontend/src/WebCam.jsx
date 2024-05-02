@@ -307,7 +307,6 @@ const WebCam = () => {
         <div className=""></div>
       </div>
     </div>
-    //new changed from DV
   );
 };
 export default WebCam;
