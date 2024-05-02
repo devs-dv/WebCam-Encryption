@@ -95,10 +95,17 @@ function Home() {
                   Do you really want to grant access to camera and microphone?
                 </p>
                 <div className="button-container">
-                  <button className="yes-button" onClick={handleGrantAccess}>
+                  <button
+                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
+                    onClick={handleGrantAccess}
+                  >
                     Yes
                   </button>
-                  <button className="no-button" onClick={handleDenyAccess}>
+                  <span> </span>
+                  <button
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
+                    onClick={handleDenyAccess}
+                  >
                     No
                   </button>
                 </div>
