@@ -32,6 +32,11 @@ Throughout the development of this project, I gained valuable insights into encr
 3. Run the application using `npm start` for backend and for the frontend run the application using `npm run dev`.
 4. Access the application in your web browser.
 
+**Preview**
+`Link`
+https://www.loom.com/share/bb2074ed81fc48d0ac2d11502c489f70?sid=fcb6448c-dd25-4db4-a3f3-5b313c9537cb  
+I've shared a Loom link where you can explore the project and its functionalities.
+
 **Contributing:**
 
 Contributions are welcome! Feel free to fork the repository, make improvements, and submit a pull request.
