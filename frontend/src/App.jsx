@@ -1,9 +1,54 @@
-import { useState } from "react";
-
-import "./App.css";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import WebCam from "./WebCam";
+import "./App.css";
 
 function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/webcam" element={<WebCam />} />
+      </Routes>
+    </Router>
+  );
+}
+
+function Home() {
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const navigate = useNavigate();
+
+  const handleAccessRequest = () => {
+    // Check for browser support for getUserMedia
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      setShowConfirmationModal(true);
+    } else {
+      // If getUserMedia is not supported, show error modal
+      setShowErrorModal(true);
+    }
+  };
+
+  const handleGrantAccess = () => {
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
+      .then(() => {
+        setShowConfirmationModal(false);
+        alert("Access granted. Redirecting to WebCam page.");
+        navigate("/webcam"); // Navigate to the WebCam page
+      })
+      .catch(() => {
+        setShowConfirmationModal(false);
+        setShowErrorModal(true);
+      });
+  };
+
+  const handleDenyAccess = () => {
+    setShowConfirmationModal(false);
+    setShowErrorModal(true);
+  };
+
   return (
     <>
       <main className="flex w-full flex-col items-center justify-center text-center px-4 h-screen">
@@ -34,11 +79,42 @@ function App() {
         <p className="mx-auto mt-12 max-w-xl text-lg text-slate-700 leading-7">
           Store Your Encrypted Video In Database...
         </p>
-        <p>Scroll Down</p>
-        <p className=" text-4xl">↓</p>
-      </main>
+        <br></br>
+        <div className="Home">
+          <button
+            onClick={handleAccessRequest}
+            className="text-gray-900 bg-gradient-to-r from-red-200 via-red-400 to-red-500 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2"
+          >
+            Start Your WebCame By hitting Me!
+          </button>
 
-      <WebCam />
+          {showConfirmationModal && (
+            <div className="modal">
+              <div className="modal-content center">
+                <p>
+                  Do you really want to grant access to camera and microphone?
+                </p>
+                <div className="button-container">
+                  <button className="yes-button" onClick={handleGrantAccess}>
+                    Yes
+                  </button>
+                  <button className="no-button" onClick={handleDenyAccess}>
+                    No
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {showErrorModal && (
+            <div className="modal">
+              <div className="modal-content">
+                <p>You denied access.</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </main>
     </>
   );
 }
