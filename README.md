@@ -34,7 +34,7 @@ Throughout the development of this project, I gained valuable insights into encr
 
 **Preview**
 `Link`
-https://www.loom.com/share/bb2074ed81fc48d0ac2d11502c489f70?sid=fcb6448c-dd25-4db4-a3f3-5b313c9537cb  
+https://www.loom.com/share/0fa2a21fc3204ff8bc06b993da88529f?sid=45477906-e0fe-48c2-9202-5a2a35c88629
 I've shared a Loom link where you can explore the project and its functionalities.
 
 **Contributing:**
