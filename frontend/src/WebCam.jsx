@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Webcam from "react-webcam";
 import { saveAs } from "file-saver";
 import CryptoJS from "crypto-js";
@@ -9,7 +9,7 @@ const WebCam = () => {
     const encryptedData = CryptoJS.AES.encrypt(fileData, password).toString();
     return encryptedData;
   };
-  
+
   const webcamRef = useRef(null);
   const [encrypt, setEncrypt] = useState(null);
   const [capturedImage, setCapturedImage] = useState(null);
@@ -18,15 +18,21 @@ const WebCam = () => {
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [isRecorderPaused, setIsRecorderPaused] = useState(false);
   const [recordedVideoBlob, setRecordedVideoBlob] = useState(null);
+  const [elapsedTime, setElapsedTime] = useState(0); // State to keep track of elapsed time
 
-  // function cameraMicAcces () {
-  //      navigator.mediadevices.getUserMedia({ audio: true, video : true})
-  //      .then(function(stream){
-  //      })
-  //      .catch(function(err){
-  //       console.error("Error is opening the Camera and Video",err);
-  //      });
-  // };
+  useEffect(() => {
+    let timer;
+    if (capturingVideo && !isRecorderPaused) {
+      timer = setInterval(() => {
+        setElapsedTime((prevElapsedTime) => prevElapsedTime + 1);
+      }, 1000);
+    } else {
+      clearInterval(timer);
+    }
+
+    return () => clearInterval(timer);
+  }, [capturingVideo, isRecorderPaused]);
+
   const captureImage = () => {
     const imageSrc = webcamRef.current.getScreenshot();
     setCapturedImage(imageSrc);
@@ -34,10 +40,11 @@ const WebCam = () => {
 
   const startCaptureVideo = async () => {
     setCapturingVideo(true);
+    setElapsedTime(0); // Reset elapsed time when starting recording
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: true,
-        audio: true, // Add audio constraint for microphone access
+        audio: true,
       });
       const newMediaRecorder = new MediaRecorder(stream, {
         mimeType: "video/webm; codecs=vp9,opus",
@@ -81,6 +88,7 @@ const WebCam = () => {
       setCapturingVideo(false);
       setMediaRecorder(null);
       setIsRecorderPaused(false);
+      setElapsedTime(0); // Reset elapsed time when stopping recording
     }
   };
 
@@ -182,19 +190,10 @@ const WebCam = () => {
     }
   };
 
-
   return (
     <div className="flex flex-row justify-center h-full gap-10">
       <div className=" ">
-        <button
-          // onClick={resumeCaptureVideo}
-          className="text-gray-900 bg-gradient-to-r from-red-200 via-red-400 to-red-500 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-lime-300 dark:focus:ring-lime-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 mr-2"
-          // disabled={!isRecorderPaused}
-        >
-          Start Your WebCame By hitting this!
-        </button>
-        <br>
-        </br>
+        <br></br>
         <p className=" text-center font-bold text-3xl">Webcam Here ↓</p>
         <div className="">
           <Webcam
@@ -203,6 +202,14 @@ const WebCam = () => {
             className="rounded-lg"
             videoConstraints={{ facingMode: "user" }}
           />
+          {capturingVideo && (
+            <p className="text-white bg-black text-center py-1 rounded-lg mt-2">
+              Time: {Math.floor(elapsedTime / 60)}:
+              {elapsedTime % 60 < 10
+                ? "0" + (elapsedTime % 60)
+                : elapsedTime % 60}
+            </p>
+          )}
         </div>
 
         <div className="mt-4 flex justify-center">
@@ -326,4 +333,5 @@ const WebCam = () => {
     </div>
   );
 };
+
 export default WebCam;
