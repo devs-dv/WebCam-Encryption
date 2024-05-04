@@ -33,8 +33,8 @@ Throughout the development of this project, I gained valuable insights into encr
 4. Access the application in your web browser.
 
 **Preview**
-`Link`
-https://www.loom.com/share/0fa2a21fc3204ff8bc06b993da88529f?sid=45477906-e0fe-48c2-9202-5a2a35c88629
+`Link` - will be added Soon
+
 I've shared a Loom link where you can explore the project and its functionalities.
 
 **Contributing:**
